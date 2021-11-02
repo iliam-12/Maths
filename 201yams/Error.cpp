@@ -35,8 +35,7 @@ int check_full_nbr(std::string ope, size_t pos)
         return (84);
     nbr2 = nbr1.substr(nbr1.find("_") + 1, nbr1.size());
     nbr1 = nbr1.substr(0, nbr1.find("_"));
-    if (std::regex_match(nbr1, std::regex{"[+-]?[0-9]+"}) == false ||
-    std::regex_match(nbr2, std::regex({"[+-]?[0-9]+"}) == false) {
+    if ((std::regex_match(nbr1, std::regex{"[+-]?[0-9]+"}) == false) || std::regex_match(nbr2, std::regex({"[+-]?[0-9]+"})) == false) {
         std::cout << "There is no numbers after your combinaison" << std::endl;
         return (84);
     }

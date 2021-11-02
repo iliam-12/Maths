@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+
+##
+## EPITECH PROJECT, 2021
+## B-MAT-400-MAR-4-1-205IQ-iliam.amara
+## File description:
+## 205iq
+##
+
+import os
+import sys
+from math import pi, sqrt, exp
+
+def help():
+    print("USAGE")
+    print("    ./205IQ u s [IQ1] [IQ2]")
+    print("DESCRIPTION")
+    print("    u       mean")
+    print("    s       standard deviation")
+    print("    IQ1     minimum IQ")
+    print("    IQ2     maximum IQ")
+
+def iq_check():
+    i = 1
+    l = len(sys.argv)
+
+    if l <= 2 or l > 5:
+        help()
+        return -1
+    while i < l:
+        try:
+            nb = int(sys.argv[i])
+        except:
+            print("./205IQ: these arguments must be an int")
+            return -1
+        if (i == 3 or i == 4) and (nb < 0 or nb > 200):
+            print("./205IQ: the 1st and 2nd argument must be between 0 and 200")
+            return -1
+        if (i == 2) and (nb != 15 and nb != 24):
+            print(sys.argv[i])
+            print("./205IQ: the standart deviation must be 15 or 24")
+            return -1
+        if (i == 1) and (nb != 100):
+            print("./205IQ: the standart deviation must be 15 or 24")
+            return -1
+        i += 1
+    return (len(sys.argv))
+
+
+def iq_density():
+    u = float(sys.argv[1])
+    s = float(sys.argv[2])
+    for i in range(201):
+        result = (1/ (s * sqrt(2 * pi))) * exp(-0.5 * pow((i - u) / s, 2))
+        print(i, format(round(result, 5), ".5f"))
+
+def iq_inferior():
+    u = int(sys.argv[1])
+    s = int(sys.argv[2])
+    maxi = int(sys.argv[3])
+    result = 0.0
+    i = 0.0
+
+    while i < maxi:
+        result = result + (1 / (float(s) * sqrt(2 * pi))) * exp(-0.5 * pow((float(i) - float(u)) / float(s), 2))
+        i += 0.01
+    print (format(result, ".1f"), "% of people have an IQ inferior to ", maxi, sep="")
+
+def iq_between():
+    u = int(sys.argv[1])
+    s = int(sys.argv[2])
+    maxi = int(sys.argv[4])
+    mini = float(sys.argv[3])
+    result = 0.0
+    
+    if mini > maxi:
+        print("./205IQ: the 3rd arguments must be inferior as the 4th")
+        return -1
+    while mini < maxi:
+        result = result + (1 / (float(s) * sqrt(2 * pi))) * exp(-0.5 * pow((float(mini) - float(u)) / float(s), 2))
+        mini += 0.01
+    print (format(result, ".1f"), "% of people have an IQ between ", int(sys.argv[3])," and ", maxi, sep="")
+    return (0)
+
+def Iq():
+    if len(sys.argv) <= 2 or len(sys.argv) > 5:
+        help()
+        sys.exit(84)
+    if (sys.argv[1] == "-h" or sys.argv[1] == "--help"):
+        help()
+        sys.exit(0)
+    i = iq_check()
+    if (i == 3):
+        iq_density()
+    elif (i == 4):
+        iq_inferior()
+    elif (i == 5):
+        i = iq_between() 
+    if (i == -1):
+        sys.exit(84)
+    else:
+        sys.exit(0)
+
+if __name__ == '__main__':
+    Iq()

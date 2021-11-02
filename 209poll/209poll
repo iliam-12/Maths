@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+
+##
+## EPITECH PROJECT, 2021
+## B-MAT-400-MAR-4-1-209poll-franck.minassian
+## File description:
+## 209poll
+##
+
+import os
+import sys
+from math import sqrt
+
+pSize = 0
+sSize = 0
+p = 0.0
+
+def print_help():
+    print("USAGE")
+    print("\t./209poll pSize sSize p\n")
+    print("DESCRIPTION")
+    print("\tpSize\tsize of the population")
+    print("\tsSize\tsize of the sample (supposed to be representative)")
+    print("\tp\tpercentage of voting intentions for a specific candidate")
+
+def error_management():
+    global pSize
+    global sSize
+    global p
+    
+    try:
+        pSize = int(sys.argv[1])
+        sSize = int(sys.argv[2])
+        p = float(sys.argv[3])
+    except:
+        print("./209poll: all agument must be a number")
+        return False
+    if pSize < 0 or sSize < 0:
+        print("./209poll: the number must be positive")
+        return False
+    if p < 0 or p > 100:
+        return False
+    return True
+
+def variance():
+    var = ((p * (100 - p)) / 10000) / sSize * ((pSize - sSize) / (pSize - 1))
+    ci95 = 1.96 * sqrt(var) * 100
+    ci99 =  2.58 * sqrt(var) * 100
+    return var, ci95, ci99
+
+def poll():
+    var, ci95, ci99 = variance()
+    print("Population size:\t {}".format(pSize))
+    print("Sample size:\t\t {}".format(sSize))
+    print("Voting intentions:\t %.2f%%"%p)
+    print("Variance:\t\t {:.6f}".format(var))
+    print("95% confidence interval: [{:.2f}%; {:.2f}%]".format((max(p - ci95, 0)), (min(p + ci95, 100))))
+    print("99% confidence interval: [{:.2f}%; {:.2f}%]".format((max(p - ci99, 0)), (min(p + ci99, 100))))
+
+if __name__ == '__main__':
+    if len(sys.argv) != 4:
+        if len(sys.argv) == 2 and (sys.argv[1] == "-h" or sys.argv[1] == "--help"):
+            print_help()
+            sys.exit(0)
+        print("./209poll: use \"./209poll -h\" for help")
+        sys.exit(84)
+    if error_management() == False:
+        sys.exit(84)
+    else:
+        poll()
+        sys.exit(0)

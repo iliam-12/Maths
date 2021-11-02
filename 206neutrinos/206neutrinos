@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+
+##
+## EPITECH PROJECT, 2021
+## B-MAT-400-MAR-4-1-206neutrinos-franck.minassian
+## File description:
+## 206neutrinos
+##
+
+import os
+import sys
+from math import sqrt
+import math
+
+n = 0
+a = 0
+h = 0
+sd = 0
+
+
+def check_value(value):
+    try:
+        i = float(value)
+    except:
+        sys.exit(84)
+    return i
+
+def print_help():
+    print("USAGE\n\t./206neutrinos n a h sd\n\nDESCRIPTION\n\tn       number of values\n\ta       arithmetic mean\n\th       harmonic mean\n\tsd      standard deviation")
+
+def truncate(number, decimals=0):
+    factor = 10.0 ** decimals
+    return math.trunc(number * factor) / factor
+
+def print_info(inpt):
+    global n
+    global a
+    global h
+    global sd
+
+    n += 1
+    print("    Number of values:   {}".format(int(n)))
+
+    sd = sqrt(((pow(float(sd), 2) + pow(float(a), 2)) * (float(n) - 1) + pow(float(inpt), 2)) / (float(n)) - pow(((float(a) * (float(n) - 1)) + (float(inpt))) / (float(n)), 2))
+    sd = round(sd, 2)
+    print("    Standard deviation: {}".format(sd)) 
+
+    am = ((float(a) * (float(n) - 1)) + float(inpt)) / float(n)
+    am = round(am, 2)
+    print("    Arithmetic mean:    {}".format(am))
+
+    rms = sqrt(((pow(sd, 2) + pow(a, 2)) * (n - 1) + pow(int(inpt), 2)) / n)
+    rms = round(rms, 3)
+    rms = truncate(rms, 2)
+    print("    Root mean square:   {}".format(rms))
+
+    hm = float(n) / ((1 / float(inpt)) + (float(n) - 1) / float(h))
+    hm = round(hm, 2)
+    print("    Harmonic mean:      {}\n".format(hm))
+
+    a = am 
+    h = hm
+    sd = float(sd)
+
+def loop():
+    global n2
+    while 1:
+        inpt = input("Enter next value: ")
+        if inpt == "END":
+            sys.exit(0)
+        try:
+            int(inpt)
+        except:
+            n2 = n
+            loop()
+        print_info(inpt)
+        
+
+def neutrinos():
+    global n
+    global n2
+    global a
+    global h
+    global sd
+
+    if len(sys.argv) == 2 and sys.argv[1] == "-h":
+        print_help()
+        sys.exit(0)
+    if len(sys.argv) != 5:
+        sys.exit(84)
+    n = check_value(sys.argv[1])
+    if n < 0:
+        print("./206neutrinos: n must be a positive number")
+        sys.exit(84)
+    n2 = n
+    a = check_value(sys.argv[2]) 
+    h = check_value(sys.argv[3]) 
+    sd = check_value(sys.argv[4])
+    loop()
+
+if __name__ == '__main__':
+    try:
+        neutrinos()
+    except KeyboardInterrupt:
+        sys.exit(84)
+    except EOFError:
+        sys.exit(84)
